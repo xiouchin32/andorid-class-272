@@ -45,5 +45,7 @@ public class MainActivity extends AppCompatActivity {
         String text = editText.getText().toString();//轉字串放上去，因為怕抓到的東西會有其他屬性
         text = text + " Order: " + drink;
         textView.setText(text);
+        editText.setText("");
+
     }
 }

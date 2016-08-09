@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="false" android:drawable="@drawable/images"></item>
+    <!--//按鈕沒按下-->
+    <item android:state_pressed="true" >
+        <!--//按鈕按下-->
+        <shape>
+            <solid android:color="@color/colorAccent"></solid>
+            <!--//變顏色-->
+            <corners android:radius="30dp"></corners>
+            <!--//角度弧度30-->
+        </shape>
+    </item>
+</selector>
