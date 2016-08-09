@@ -50,16 +50,17 @@
         android:id="@+id/radioGroup">
 
         <RadioButton
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:text="Black Tea"
+            android:layout_width="143dp"
+            android:layout_height="match_parent"
+            android:drawableRight = "@drawable/black"
             android:id="@+id/blackTearadioButton"
             android:checked="true" />
 
         <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Green Tea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text=" "
+            android:drawableRight = "@drawable/green"
             android:id="@+id/greenTearadioButton2"
             android:checked="false" />
     </RadioGroup>
