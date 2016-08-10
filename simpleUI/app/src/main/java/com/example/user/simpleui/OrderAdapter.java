@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * Created by user on 2016/8/10.
  */
+//繼承baseadapter 系統會告訴你哪些function要做
 public class OrderAdapter extends BaseAdapter{
     //建構子
     List<Order> orders;
@@ -42,7 +43,7 @@ public class OrderAdapter extends BaseAdapter{
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder;
-//        View convertView做有效回收 把上次itemviews拿出。parent  飲料可能有很多 可以用viewdroup的奶茶類都收起來，幫助把itemview group起來
+        // View convertView做有效回收 把上次itemviews拿出。parent  飲料可能有很多 可以用viewdroup的奶茶類都收起來，幫助把itemview group起來
         //重新設定UI上面的convertView
         if(convertView == null)
         {
@@ -57,11 +58,11 @@ public class OrderAdapter extends BaseAdapter{
             holder.storeInfoTextView = storeInfoTextView;
             //代表holder已經握有元件
 
-            convertView.setTag(holder);
+            convertView.setTag(holder); //把holdertag的東西放入TAG
         }
         else
         {
-            holder = (Holder)convertView.getTag();//直接重convertview 拿出
+            holder = (Holder)convertView.getTag();//直接重convertview TAG拿出
         }
 
         Order order = orders.get(position);
