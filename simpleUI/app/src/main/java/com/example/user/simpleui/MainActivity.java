@@ -7,7 +7,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -15,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     RadioGroup radioGroup;
     ListView listView;
+    Spinner spinner;
+    List<String> data = new ArrayList<>();
 
     String drink = "Black Tea";//初設為紅茶
 
@@ -27,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
         editText = (EditText)findViewById(R.id.editText);
         radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
         listView = (ListView)findViewById(R.id.listView);
+        spinner = (Spinner)findViewById(R.id.spinner);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -42,13 +49,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });//要知道有沒有改變
 
-        sutupListView();
+        setupListView();
+        setupSpinner();
     }
-    private void sutupListView()
+    private void setupListView()
     {
-        String []data = new String[]{"1","2","3","4","5","6","7","8"};
+//        String []data = new String[]{"1","2","3","4","5","6","7","8"};
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,data);
         listView.setAdapter(adapter);
+    }
+    private  void setupSpinner()
+    {
+//        dase來自resourse
+        String []storeInfo = getResources().getStringArray(R.array.storeInfo);
+        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,storeInfo);
+        spinner.setAdapter(adapter);
     }
     public void click (View view)
     {
@@ -56,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         text = text + " Order: " + drink;
         textView.setText(text);
         editText.setText("");
+        data.add(text);
 
+        setupListView();
+//        重新刷新LISTVIEW
     }
 }

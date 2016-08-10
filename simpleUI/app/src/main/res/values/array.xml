@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name = "storeInfo">
+        <!--下拉示選單選項(spinner)-->
+        <item>台大店</item>
+        <item>公館店</item>
+        <item>西門店</item>
+        <item>復興店</item>
+        <item>土城店</item>
+    </string-array>
+</resources>
