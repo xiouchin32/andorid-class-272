@@ -133,6 +133,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this ,result,Toast.LENGTH_LONG).show();
             }
         }
+        //requestcode代表頁面的序碼
     }
 
     //以下為生命周期，在android monitor 可以觀察
