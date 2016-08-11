@@ -2,6 +2,7 @@ package com.example.user.simpleui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -43,13 +44,10 @@ public class MainActivity extends AppCompatActivity {
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-            //知道有改變，在事件裡寫東西 checkedId是知道選哪個
-                if(checkedId == R.id.blackTearadioButton)
-                {
+                //知道有改變，在事件裡寫東西 checkedId是知道選哪個
+                if (checkedId == R.id.blackTearadioButton) {
                     drink = "Black Tea";
-                }
-                else if(checkedId == R.id.greenTearadioButton2)
-                {
+                } else if (checkedId == R.id.greenTearadioButton2) {
                     drink = "Green Tea";
                 }
             }
@@ -58,12 +56,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
-                Toast.makeText(MainActivity.this,order.note,Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();
                 //MainActivity.this 被包在listner裡面 this 代表的是 listener
             }
         });
         setupListView();
         setupSpinner();
+
+        Log.d("DEBUG","MainActivity OnCreate");
     }
     private void setupListView()
     {
@@ -104,15 +104,50 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(result);
         editText.setText("");
 
-        Order order = new Order();
-//        new一個訂單
+        Order order = new Order();//        new一個訂單
         order.note = text;
         order.drink = drink;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         data.add(order);
-
         setupListView();
 //        重新刷新LISTVIEW
+    }
+
+    //以下為生命周期，在android monitor 可以觀察
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Log.d("DEBUG", "MainActivity OnStart");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("DEBUG", "MainActivity OnResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("DEBUG", "MainActivity OnPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("DEBUG", "MainActivity OnStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("DEBUG", "MainActivity OnDestroy");
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d("DEBUG", "MainActivity OnRestart");
     }
 }
