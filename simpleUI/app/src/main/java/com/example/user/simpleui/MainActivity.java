@@ -22,6 +22,7 @@ import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
+    static final int REQUEST_CODE_DRINK_MENU_ACTIVITY = 0;
     TextView textView;
     EditText editText;
     RadioGroup radioGroup;
@@ -118,8 +119,22 @@ public class MainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent();
         intent.setClass(this,DrinkMenuActivity.class);//呼叫DrinkMenuActivity.class 到this
-        startActivity(intent);
+        startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {//requestCode 辨別重哪個actitvity回來 resultCode 狀態
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY)
+        {
+            if(resultCode == RESULT_OK)
+            {
+                String result = data.getStringExtra("result");
+                Toast.makeText(this ,result,Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
     //以下為生命周期，在android monitor 可以觀察
     @Override
     protected void onStart() {
