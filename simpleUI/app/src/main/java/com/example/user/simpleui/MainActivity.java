@@ -1,5 +1,6 @@
 package com.example.user.simpleui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -113,7 +114,12 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
 //        重新刷新LISTVIEW
     }
-
+    public void goToMenu(View view)//進來呼叫為button
+    {
+        Intent intent = new Intent();
+        intent.setClass(this,DrinkMenuActivity.class);//呼叫DrinkMenuActivity.class 到this
+        startActivity(intent);
+    }
     //以下為生命周期，在android monitor 可以觀察
     @Override
     protected void onStart() {
