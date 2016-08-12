@@ -1,6 +1,9 @@
 package com.example.user.simpleui;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +15,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrinkMenuActivity extends AppCompatActivity {
+public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDialog.OnFragmentInteractionListener {
 
     ListView drinkMenuLisView;
     TextView totalTextView;
@@ -39,8 +42,10 @@ public class DrinkMenuActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Drink drink = (Drink)parent.getAdapter().getItem(position);
-                total += drink.mPrices;
-                totalTextView.setText(String.valueOf(total));
+                //選取中杯大杯
+                showDrinkOrferDialog(drink);
+//                total += drink.mPrices;
+//                totalTextView.setText(String.valueOf(total));
             }
         });
 
@@ -76,7 +81,7 @@ public class DrinkMenuActivity extends AppCompatActivity {
     public void cancel(View view)
     {
         Intent intent = new Intent();
-        intent.putExtra("resultcancel","取消訂單");
+        intent.putExtra("resultcancel", "取消訂單");
         setResult(RESULT_CANCELED,intent);
         finish();
     }
@@ -84,6 +89,19 @@ public class DrinkMenuActivity extends AppCompatActivity {
     {
         DrinkAdapter adapter = new DrinkAdapter(this,drinkList);
         drinkMenuLisView.setAdapter(adapter);
+    }
+
+    private void showDrinkOrferDialog(Drink drink)
+    {
+        FragmentManager fragmentManager = getFragmentManager();
+
+        FragmentTransaction ft =  fragmentManager.beginTransaction();//開起交易
+        // "FragmentTransaction" 1.希望當大量刷新頁面的時候，刪掉跟加入一起做，要不要就都不要做   2.在有空狀況下才去做換頁面，避免發生問題
+
+        //交易內容以下
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
+        ft.replace(R.id.root,dialog);//替換當前頁面的fragment
+        ft.commit();
     }
     @Override
     protected void onStart() {
@@ -118,5 +136,10 @@ public class DrinkMenuActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
         Log.d("DEBUG", "DrinkMenuActivity OnRestart");
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
     }
 }
