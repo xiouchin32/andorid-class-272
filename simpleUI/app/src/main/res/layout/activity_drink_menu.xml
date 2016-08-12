@@ -43,8 +43,23 @@
         android:layout_height="wrap_content"
         android:text="Done"
         android:id="@+id/button3"
+        android:onClick="done"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:onClick="done" />
+        android:layout_marginRight="84dp"
+        android:layout_marginEnd="84dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CANCEL"
+        android:id="@+id/button4"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignStart="@+id/button3"
+        android:layout_marginLeft="88dp"
+        android:layout_marginStart="88dp"
+        android:onClick="cancel"
+        android:nestedScrollingEnabled="true" />
 </RelativeLayout>

@@ -125,16 +125,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {//requestCode 辨別重哪個actitvity回來 resultCode 狀態
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY)
-        {
-            if(resultCode == RESULT_OK)
-            {
+        if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY) {
+            if (resultCode == RESULT_OK) {
                 String result = data.getStringExtra("result");
-                Toast.makeText(this ,result,Toast.LENGTH_LONG).show();
+                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+            }
+            else if (resultCode == RESULT_CANCELED)
+            {
+                String result = data.getStringExtra("resultcancel");
+                Toast.makeText(this,result,Toast.LENGTH_LONG).show();
             }
         }
         //requestcode代表頁面的序碼
+
     }
+
 
     //以下為生命周期，在android monitor 可以觀察
     @Override

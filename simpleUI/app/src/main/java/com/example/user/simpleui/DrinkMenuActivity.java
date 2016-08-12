@@ -72,6 +72,14 @@ public class DrinkMenuActivity extends AppCompatActivity {
         finish();//把頁面關閉
         //回activity 接收值
     }
+
+    public void cancel(View view)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("resultcancel","取消訂單");
+        setResult(RESULT_CANCELED,intent);
+        finish();
+    }
     private  void setupDrinkMenu()
     {
         DrinkAdapter adapter = new DrinkAdapter(this,drinkList);
