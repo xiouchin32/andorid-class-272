@@ -99,7 +99,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         // "FragmentTransaction" 1.希望當大量刷新頁面的時候，刪掉跟加入一起做，要不要就都不要做   2.在有空狀況下才去做換頁面，避免發生問題
 
         //交易內容以下
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
 //        ft.replace(R.id.root,dialog);//替換當前頁面的fragment
 //        ft.commit();
         dialog.show(ft,"DinkOrderDialog");//在show的時候自動在translation做commit
