@@ -100,8 +100,9 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         //交易內容以下
         DrinkOrderDialog dialog = DrinkOrderDialog.newInstance("","");
-        ft.replace(R.id.root,dialog);//替換當前頁面的fragment
-        ft.commit();
+//        ft.replace(R.id.root,dialog);//替換當前頁面的fragment
+//        ft.commit();
+        dialog.show(ft,"DinkOrderDialog");//在show的時候自動在translation做commit
     }
     @Override
     protected void onStart() {

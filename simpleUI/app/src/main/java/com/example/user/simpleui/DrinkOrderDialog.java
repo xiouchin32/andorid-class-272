@@ -1,6 +1,10 @@
 package com.example.user.simpleui;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.Bundle;
 //import android.support.v4.app.Fragment; 支援API22以下的再以前還沒有fragment得時候
@@ -8,6 +12,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DialerFilter;
 
 
 /**
@@ -18,7 +23,8 @@ import android.view.ViewGroup;
  * Use the {@link DrinkOrderDialog#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrinkOrderDialog extends Fragment {
+public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP的視窗
+{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -51,22 +57,50 @@ public class DrinkOrderDialog extends Fragment {
         fragment.setArguments(args);
         return fragment;
     }
+//要在架構上新增自己的layout n所以將他原本設計的oncreat註解
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);//從bumdel拿key值所對應到的變數
-            mParam2 = getArguments().getString(ARG_PARAM2);
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if(getArguments()!=null)
+        {
+
         }
+        View contentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_drink_order_dialog, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//依照他的架構創兆出POPUP的視窗
+
+        builder.setView(contentView)
+                .setTitle("Hello Dialog")
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });
+                return builder.create();
+
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,//ViewGrou就是幫他的是誰
-                             Bundle savedInstanceState) {//用來設定layout子葉面
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_drink_order_dialog, container, false);//幫他把fragment_drink_order_dialog頁面用出來
-    }//在這拿UIcomponet 的話' 用View view =  inflater.inflate(R.layout.fragment_drink_order_dialog, container, false);Textview textview = view ;return  textview來拿
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//        if (getArguments() != null) {
+//            mParam1 = getArguments().getString(ARG_PARAM1);//從bumdel拿key值所對應到的變數
+//            mParam2 = getArguments().getString(ARG_PARAM2);
+//        }
+//    }
+//
+//    @Override
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container,//ViewGrou就是幫他的是誰
+//                             Bundle savedInstanceState) {//用來設定layout子葉面
+//        // Inflate the layout for this fragment
+//        return inflater.inflate(R.layout.fragment_drink_order_dialog, container, false);//幫他把fragment_drink_order_dialog頁面用出來
+//    }//在這拿UIcomponet 的話' 用View view =  inflater.inflate(R.layout.fragment_drink_order_dialog, container, false);Textview textview = view ;return  textview來拿
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
