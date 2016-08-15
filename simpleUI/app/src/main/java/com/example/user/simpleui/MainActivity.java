@@ -1,8 +1,11 @@
 package com.example.user.simpleui;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -31,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
 //    List<String> data = new ArrayList<>();
     List<Order> data = new ArrayList<>();
 
+    SharedPreferences sharedPreferences;
+    SharedPreferences.Editor editor;
+    //小資料 UI狀態的東西 USER的資料 APP資料 APP設定都會放在SharedPreferences
+
+
     String drink = "Black Tea";//初設為紅茶
 
     ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
@@ -45,6 +53,33 @@ public class MainActivity extends AppCompatActivity {
         radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
         listView = (ListView)findViewById(R.id.listView);
         spinner = (Spinner)findViewById(R.id.spinner);
+
+        sharedPreferences = getSharedPreferences("UIState", MODE_PRIVATE);//建立XML的檔
+        editor = sharedPreferences.edit();//寫檔用edit 去寫檔 (拿到寫檔的權利)
+
+        //當之前有寫過狀態要把他設定回去，再次開起的時候就可以回到上次的樣子
+        editText.setText(sharedPreferences.getString("editText",""));
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //還沒改變呼叫
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                //正在改變呼叫
+                editor.putString("editText",editText.getText().toString());
+                editor.apply();
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //改變後呼叫
+            }
+        });
+
+
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {

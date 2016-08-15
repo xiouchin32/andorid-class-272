@@ -43,7 +43,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         drinkMenuLisView = (ListView)findViewById(R.id.drinkMenuListView);
         totalTextView = (TextView)findViewById(R.id.totalTextView);
-        
+
         updateTotalTextView();
 
         drinkMenuLisView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
