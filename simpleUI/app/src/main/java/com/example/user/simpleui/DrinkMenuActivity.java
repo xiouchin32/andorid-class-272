@@ -73,7 +73,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         Intent intent = new Intent();
         intent.putExtra("result",String.valueOf(total));
 
-        setResult(RESULT_OK,intent);
+        setResult(RESULT_OK, intent);
         //RESULT_OK (回去的狀態是好的) 就是完成了事情回上一頁
         //intent 回去的DATA;
         finish();//把頁面關閉
@@ -95,13 +95,28 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
     private void showDrinkOrferDialog(Drink drink)
     {
-        FragmentManager fragmentManager = getFragmentManager();
+        DrinkOrder order = null;
+        for(DrinkOrder drinkOrder :drinkOrdersList)
+        {
+            if(drinkOrder.drink.name.equals(drink.name))
+            {
+                order = drinkOrder;
+                break;
+            }
 
+        }
+
+        if(order == null)
+        {
+            order = new DrinkOrder(drink);
+        }
+
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction ft =  fragmentManager.beginTransaction();//開起交易
         // "FragmentTransaction" 1.希望當大量刷新頁面的時候，刪掉跟加入一起做，要不要就都不要做   2.在有空狀況下才去做換頁面，避免發生問題
 
         //交易內容以下
-        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(drink);
+        DrinkOrderDialog dialog = DrinkOrderDialog.newInstance(order);
 //        ft.replace(R.id.root,dialog);//替換當前頁面的fragment
 //        ft.commit();
         dialog.show(ft, "DinkOrderDialog");//在show的時候自動在translation做commit
@@ -144,8 +159,22 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     @Override
     public void onDrinkOrderResult(DrinkOrder drinkOrder) {
     //回收資料做整數的相加
-        drinkOrdersList.add(drinkOrder);
+        boolean flag= false;//沒有找到一樣的
+
+        for(int i=0;i<drinkOrdersList.size();i++)
+        {
+            if(drinkOrdersList.get(i).drink.name.equals(drinkOrder.drink.name))//判斷飲料ID是不是一樣
+            {
+//                order = drinkOrder; 不能這樣打因為訂單會一一連結這樣會出問題\
+                drinkOrdersList.set(i,drinkOrder);
+                flag = true;
+                break;
+            }
+        }
+        if(!flag)
+            drinkOrdersList.add(drinkOrder);
         updateTotalTextView();
+
     }
 
     private  void updateTotalTextView()

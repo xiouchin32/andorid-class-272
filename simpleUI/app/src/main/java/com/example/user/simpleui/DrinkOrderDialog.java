@@ -37,7 +37,7 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
     RadioGroup sugarRadioGroup;
     EditText noteEditText;
 
-    private Drink drink;
+    private DrinkOrder drinkOrder;
 
     private OnFragmentInteractionListener mListener;//介面的監聽器
 
@@ -51,13 +51,13 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
      * @return A new instance of fragment DrinkOrderDialog.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrinkOrderDialog newInstance(Drink drink) {//目的new出frgment的 unstense
+    public static DrinkOrderDialog newInstance(DrinkOrder drinkOrder) {//目的new出frgment的 unstense
         DrinkOrderDialog fragment = new DrinkOrderDialog();
         Bundle args = new Bundle();//會攜帶所有變數
 //        args.putString(ARG_PARAM1, param1);//希望別人拿的時候不要看到裡面東西
 //        args.putString(ARG_PARAM2, param2);
 
-        args.putParcelable(ARG_PARAM1, drink);
+        args.putParcelable(ARG_PARAM1, drinkOrder);
         fragment.setArguments(args);
         return fragment;
     }
@@ -67,17 +67,17 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         if(getArguments()!=null)
         {
-            drink = getArguments().getParcelable(ARG_PARAM1);
+            this.drinkOrder = getArguments().getParcelable(ARG_PARAM1);
         }
         View contentView = getActivity().getLayoutInflater().inflate(R.layout.fragment_drink_order_dialog, null);
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//依照他的架構創兆出POPUP的視窗
 
         builder.setView(contentView)
-                .setTitle(drink.name)
+                .setTitle(drinkOrder.drink.name)
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        DrinkOrder drinkOrder = new DrinkOrder(drink);
+//                        DrinkOrder drinkOrder = new DrinkOrder(drink); 在外面已經做過了
                         drinkOrder.mNumber = mNumberPicker.getValue();
                         drinkOrder.lNumber = lNumberPicker.getValue();
                         //寫一個小的function 回傳RADIOBUTTON 上面的字
@@ -85,8 +85,7 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
                         drinkOrder.sugar = getSelectedTextFromRadioGroup(sugarRadioGroup);
                         drinkOrder.note = noteEditText.getText().toString();
 
-                        if(mListener!=null)
-                        {
+                        if (mListener != null) {
                             mListener.onDrinkOrderResult(drinkOrder);//回傳
                             //當我們按下BUTTON 先把DRINK的資料做出來 再回傳
                         }
@@ -104,14 +103,19 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
         sugarRadioGroup = (RadioGroup)contentView.findViewById(R.id.sugarRadioGroup);
         noteEditText = (EditText)contentView.findViewById(R.id.noteEditText);
 
+
         mNumberPicker.setMaxValue(100);
         mNumberPicker.setMinValue(0);//設定最大最小值
+        mNumberPicker.setValue(drinkOrder.mNumber);
 
         lNumberPicker.setMaxValue(100);
         lNumberPicker.setMinValue(0);
+        lNumberPicker.setValue(drinkOrder.lNumber);//一打開為之前的數量
 
+        noteEditText.setText(drinkOrder.note);
 
-
+        setSelectedTextInRadioGroup(drinkOrder.ice,iceRadioGroup);//把資料做復原
+        setSelectedTextInRadioGroup(drinkOrder.sugar,sugarRadioGroup);
 
 
         return builder.create();
@@ -125,6 +129,27 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
         RadioButton radioButton = (RadioButton) radioGroup.findViewById(id);
         return  radioButton.getText().toString();
 
+    }
+
+    private  void setSelectedTextInRadioGroup(String selectedText,RadioGroup radioGroup)
+    {
+        //selectedText 選擇那個字 從radioGroup裡面找到並且打勾
+        int count =  radioGroup.getChildCount();
+        for(int i=0;i<count ;i++)
+        {
+            View view = radioGroup.getChildAt(i);
+            if(view instanceof RadioButton)//判斷是否為RadioButton
+            {
+                RadioButton radioButton = (RadioButton)view;
+                if(radioButton.getText().toString().equals(selectedText))
+                {
+                    radioButton.setChecked(true);
+                }
+                else
+                    radioButton.setChecked(false);
+            }
+
+        }
     }
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
