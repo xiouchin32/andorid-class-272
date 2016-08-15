@@ -21,7 +21,7 @@
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/numberPicker"
+        android:id="@+id/mnumberPicker"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView5"
         android:layout_toEndOf="@+id/textView5"
@@ -34,14 +34,14 @@
         android:text="Large:"
         android:id="@+id/textView6"
         android:layout_alignTop="@+id/textView5"
-        android:layout_toRightOf="@+id/numberPicker"
-        android:layout_toEndOf="@+id/numberPicker"
+        android:layout_toRightOf="@+id/mnumberPicker"
+        android:layout_toEndOf="@+id/mnumberPicker"
         android:layout_marginLeft="10dp" />
 
     <NumberPicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/numberPicker2"
+        android:id="@+id/lnumberPicker"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/textView6"
         android:layout_toEndOf="@+id/textView6"
@@ -53,7 +53,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Ice"
         android:id="@+id/textView7"
-        android:layout_below="@+id/numberPicker"
+        android:layout_below="@+id/mnumberPicker"
         android:layout_alignLeft="@+id/textView5"
         android:layout_alignStart="@+id/textView5" />
 
@@ -64,7 +64,7 @@
         android:layout_alignLeft="@+id/textView7"
         android:layout_alignStart="@+id/textView7"
         android:orientation="horizontal"
-        android:id="@+id/radioGroup2">
+        android:id="@+id/iceRadioGroup">
 
         <RadioButton
             android:layout_width="wrap_content"
@@ -96,15 +96,15 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Sugar"
         android:id="@+id/textView8"
-        android:layout_below="@+id/radioGroup2"
-        android:layout_alignLeft="@+id/radioGroup2"
-        android:layout_alignStart="@+id/radioGroup2" />
+        android:layout_below="@+id/iceRadioGroup"
+        android:layout_alignLeft="@+id/iceRadioGroup"
+        android:layout_alignStart="@+id/iceRadioGroup" />
 
     <RadioGroup
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:id="@+id/radioGroup3"
+        android:id="@+id/sugarRadioGroup"
         android:layout_below="@+id/textView8"
         android:layout_alignLeft="@+id/textView8"
         android:layout_alignStart="@+id/textView8">
@@ -139,14 +139,14 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Note"
         android:id="@+id/textView9"
-        android:layout_below="@+id/radioGroup3"
-        android:layout_alignLeft="@+id/radioGroup3"
-        android:layout_alignStart="@+id/radioGroup3" />
+        android:layout_below="@+id/sugarRadioGroup"
+        android:layout_alignLeft="@+id/sugarRadioGroup"
+        android:layout_alignStart="@+id/sugarRadioGroup" />
 
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/noteEditText"
         android:layout_below="@+id/textView9"
         android:layout_alignLeft="@+id/textView9"
         android:layout_alignStart="@+id/textView9" />

@@ -9,10 +9,11 @@ import android.net.Uri;
 import android.os.Bundle;
 //import android.support.v4.app.Fragment; 支援API22以下的再以前還沒有fragment得時候
 import android.app.Fragment;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.DialerFilter;
+import android.widget.EditText;
+import android.widget.NumberPicker;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 /**
@@ -30,9 +31,15 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    NumberPicker mNumberPicker;
+    NumberPicker lNumberPicker;
+    RadioGroup  iceRadioGroup;
+    RadioGroup sugarRadioGroup;
+    EditText noteEditText;
+
     private Drink drink;
 
-    private OnFragmentInteractionListener mListener;
+    private OnFragmentInteractionListener mListener;//介面的監聽器
 
     public DrinkOrderDialog() {
         // Required empty public constructor
@@ -50,7 +57,7 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
 //        args.putString(ARG_PARAM1, param1);//希望別人拿的時候不要看到裡面東西
 //        args.putString(ARG_PARAM2, param2);
 
-        args.putParcelable(ARG_PARAM1,drink);
+        args.putParcelable(ARG_PARAM1, drink);
         fragment.setArguments(args);
         return fragment;
     }
@@ -70,7 +77,19 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        DrinkOrder drinkOrder = new DrinkOrder(drink);
+                        drinkOrder.mNumber = mNumberPicker.getValue();
+                        drinkOrder.lNumber = lNumberPicker.getValue();
+                        //寫一個小的function 回傳RADIOBUTTON 上面的字
+                        drinkOrder.ice = getSelectedTextFromRadioGroup(iceRadioGroup);
+                        drinkOrder.sugar = getSelectedTextFromRadioGroup(sugarRadioGroup);
+                        drinkOrder.note = noteEditText.getText().toString();
 
+                        if(mListener!=null)
+                        {
+                            mListener.onDrinkOrderResult(drinkOrder);//回傳
+                            //當我們按下BUTTON 先把DRINK的資料做出來 再回傳
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -79,10 +98,34 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
 
                     }
                 });
-                return builder.create();
+        mNumberPicker = (NumberPicker)contentView.findViewById(R.id.mnumberPicker);
+        lNumberPicker = (NumberPicker)contentView.findViewById(R.id.lnumberPicker);
+        iceRadioGroup = (RadioGroup)contentView.findViewById(R.id.iceRadioGroup);
+        sugarRadioGroup = (RadioGroup)contentView.findViewById(R.id.sugarRadioGroup);
+        noteEditText = (EditText)contentView.findViewById(R.id.noteEditText);
+
+        mNumberPicker.setMaxValue(100);
+        mNumberPicker.setMinValue(0);//設定最大最小值
+
+        lNumberPicker.setMaxValue(100);
+        lNumberPicker.setMinValue(0);
+
+
+
+
+
+        return builder.create();
 
     }
 
+    private String getSelectedTextFromRadioGroup(RadioGroup radioGroup)
+    {
+        //拿到Radio 上面的字
+        int id = radioGroup.getCheckedRadioButtonId();
+        RadioButton radioButton = (RadioButton) radioGroup.findViewById(id);
+        return  radioButton.getText().toString();
+
+    }
 //    @Override
 //    public void onCreate(Bundle savedInstanceState) {
 //        super.onCreate(savedInstanceState);
@@ -100,11 +143,11 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
 //    }//在這拿UIcomponet 的話' 用View view =  inflater.inflate(R.layout.fragment_drink_order_dialog, container, false);Textview textview = view ;return  textview來拿
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {//看mListener存不存在 也就是有沒有會這個介面的人
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+//    public void onButtonPressed(Uri uri) {
+//        if (mListener != null) {    //看mListener存不存在 也就是有沒有會這個介面的人
+//            mListener.onDrinkOrderResult(uri);
+//        }
+//    }
 
     @Override
     public void onAttach(Context context) {//context是actitvity ，攜帶activity 進來
@@ -134,7 +177,6 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);//定義一個介面 讓他實做功能，才可以做溝 通
+        void onDrinkOrderResult(DrinkOrder drinkOrder);//定義一個介面 讓他實做功能，才可以做溝 通
     }
 }
