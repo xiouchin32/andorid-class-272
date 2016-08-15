@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     String drink = "Black Tea";//初設為紅茶
 
+    ArrayList<DrinkOrder> drinkOrderList = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,16 +110,19 @@ public class MainActivity extends AppCompatActivity {
 
         Order order = new Order();//        new一個訂單
         order.note = text;
-        order.drink = drink;
+        order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
         data.add(order);
+
+        drinkOrderList = new ArrayList<>();//把飲料訂單清空
         setupListView();
 //        重新刷新LISTVIEW
     }
     public void goToMenu(View view)//進來呼叫為button
     {
         Intent intent = new Intent();
+        intent.putExtra("result",drinkOrderList);//讓drinkmenuactivity 可以拿到資料
         intent.setClass(this,DrinkMenuActivity.class);//呼叫DrinkMenuActivity.class 到this
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
     }
@@ -127,8 +132,8 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == REQUEST_CODE_DRINK_MENU_ACTIVITY) {
             if (resultCode == RESULT_OK) {
-                String result = data.getStringExtra("result");
-                Toast.makeText(this, result, Toast.LENGTH_LONG).show();
+                drinkOrderList = data.getParcelableArrayListExtra("result");//從上一夜拿到了DRINLOREDERLIST
+                //Toast.makeText(this, result, Toast.LENGTH_LONG).show();
             }
             else if (resultCode == RESULT_CANCELED)
             {

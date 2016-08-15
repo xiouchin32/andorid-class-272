@@ -27,8 +27,8 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     int[] imageIDs = {R.drawable.drink1,R.drawable.drink2,R.drawable.drink3,R.drawable.drink4};//飲料圖片
 
     List<Drink>  drinkList= new ArrayList<>();
-    List<DrinkOrder> drinkOrdersList = new ArrayList<>();//把收到的訂單存下來
-
+    ArrayList<DrinkOrder> drinkOrdersList = new ArrayList<>();//把收到的訂單存下來
+    //如果要給東西BUNDLE 必須告訴他們是神麼明確的型態 才可以給人帶回
     int total = 0;
 
     @Override
@@ -37,8 +37,14 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         setContentView(R.layout.activity_drink_menu);
 
         setdata();//把飲料放到資料結構
+
+        Intent intent = getIntent();
+        drinkOrdersList = intent.getParcelableArrayListExtra("result");
+
         drinkMenuLisView = (ListView)findViewById(R.id.drinkMenuListView);
         totalTextView = (TextView)findViewById(R.id.totalTextView);
+        
+        updateTotalTextView();
 
         drinkMenuLisView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -71,7 +77,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
     {
         //資料放回去也需要Intent
         Intent intent = new Intent();
-        intent.putExtra("result",String.valueOf(total));
+        intent.putExtra("result", drinkOrdersList);
 
         setResult(RESULT_OK, intent);
         //RESULT_OK (回去的狀態是好的) 就是完成了事情回上一頁
