@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
         editor = sharedPreferences.edit();//寫檔用edit 去寫檔 (拿到寫檔的權利)
 
         //當之前有寫過狀態要把他設定回去，再次開起的時候就可以回到上次的樣子
-        editText.setText(sharedPreferences.getString("editText",""));
+        editText.setText(sharedPreferences.getString("editText", ""));
         editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -68,8 +68,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 //正在改變呼叫
-                editor.putString("editText",editText.getText().toString());
-                editor.apply();
+                editor.putString("editText", editText.getText().toString());
+                editor.apply();//做commit的動作 將東西寫到sharedPreferences
 
             }
 
@@ -78,6 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 //改變後呼叫
             }
         });
+
+
+
+
 
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -134,6 +138,20 @@ public class MainActivity extends AppCompatActivity {
         String []storeInfo = getResources().getStringArray(R.array.storeInfo);
         ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,storeInfo);
         spinner.setAdapter(adapter);
+
+        spinner.setSelection(sharedPreferences.getInt("spinner",0));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                editor.putInt("spinner", spinner.getSelectedItemPosition());
+                editor.apply();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
     public void click (View view)
     {
