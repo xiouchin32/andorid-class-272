@@ -110,30 +110,32 @@ public class MainActivity extends AppCompatActivity {
         setupListView();
         setupSpinner();
 
-        ParseObject testObject = new ParseObject("TestObject");//TestObject類似classname
-        testObject.put("foo", "bar");//要放哪些資料 創造一個變數foo 裡面有個key直 bar
-        testObject.saveInBackground(new SaveCallback() {
-            @Override
-            public void done(ParseException e) {
-                // new SaveCallback() 呼叫完他會一個DONE
-                if (e == null) {
-                    //代表上傳成功
-                    Toast.makeText(MainActivity.this, "Sucess", Toast.LENGTH_LONG).show();
-                }
-            }
-        });//把物件上船到所連接的serve上面
-        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");//把物件載回來
-        query.findInBackground(new FindCallback<ParseObject>() {
-            //從網路上找完資料回來
-            @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                //objects server上找到的物件  ParseException沒有連上網 會用到
-                if(e == null)
-                {
-                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
-                }
-            }
-        });//執行回來的順序跟你的serve 上面回傳速率有關 並非寫的先後順序
+
+//        // 資料上傳到網路上
+//        ParseObject testObject = new ParseObject("TestObject");//TestObject類似classname
+//        testObject.put("foo", "bar");//要放哪些資料 創造一個變數foo 裡面有個key直 bar
+//        testObject.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                // new SaveCallback() 呼叫完他會一個DONE
+//                if (e == null) {
+//                    //代表上傳成功
+//                    Toast.makeText(MainActivity.this, "Sucess", Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });//把物件上船到所連接的serve上面
+//        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");//把物件載回來
+//        query.findInBackground(new FindCallback<ParseObject>() {
+//            //從網路上找完資料回來
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                //objects server上找到的物件  ParseException沒有連上網 會用到
+//                if(e == null)
+//                {
+//                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });//執行回來的順序跟你的serve 上面回傳速率有關 並非寫的先後順序
 
 
         Log.d("DEBUG","MainActivity OnCreate");
