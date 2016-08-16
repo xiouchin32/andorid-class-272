@@ -13,15 +13,20 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.SaveCallback;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,8 +36,8 @@ public class MainActivity extends AppCompatActivity {
     RadioGroup radioGroup;
     ListView listView;
     Spinner spinner;
-//    List<String> data = new ArrayList<>();
-    List<Order> data = new ArrayList<>();
+//    List<String> orderList = new ArrayList<>();
+    List<Order> orderList = new ArrayList<>();
 
     SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
@@ -46,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
 
         textView = (TextView)findViewById(R.id.textView);
@@ -70,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                 //正在改變呼叫
                 editor.putString("editText", editText.getText().toString());
                 editor.apply();//做commit的動作 將東西寫到sharedPreferences
-
             }
 
             @Override
@@ -78,11 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 //改變後呼叫
             }
         });
-
-
-
-
-
 
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -103,17 +103,71 @@ public class MainActivity extends AppCompatActivity {
                 //MainActivity.this 被包在listner裡面 this 代表的是 listener
             }
         });
+
+        //復原資料
+        setupOrderHistory();
+
         setupListView();
         setupSpinner();
 
+        ParseObject testObject = new ParseObject("TestObject");//TestObject類似classname
+        testObject.put("foo", "bar");//要放哪些資料 創造一個變數foo 裡面有個key直 bar
+        testObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                // new SaveCallback() 呼叫完他會一個DONE
+                if (e == null) {
+                    //代表上傳成功
+                    Toast.makeText(MainActivity.this, "Sucess", Toast.LENGTH_LONG).show();
+                }
+            }
+        });//把物件上船到所連接的serve上面
+        ParseQuery<ParseObject> query = new ParseQuery<ParseObject>("TestObject");//把物件載回來
+        query.findInBackground(new FindCallback<ParseObject>() {
+            //從網路上找完資料回來
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+                //objects server上找到的物件  ParseException沒有連上網 會用到
+                if(e == null)
+                {
+                    Toast.makeText(MainActivity.this,objects.get(0).getString("foo"),Toast.LENGTH_LONG).show();
+                }
+            }
+        });//執行回來的順序跟你的serve 上面回傳速率有關 並非寫的先後順序
+
+
         Log.d("DEBUG","MainActivity OnCreate");
+    }
+
+    private void setupOrderHistory()
+    {
+        String orderDatas = Utils.readFile(this,"history");
+        String[] orderDataArray = orderDatas.split("\n");//判斷換行來分割
+        //要用Gson換回去
+        Gson gson = new Gson();
+        for(String orderData : orderDataArray)
+        {
+            try{
+                Order order = gson.fromJson(orderData,Order.class);//要復原成Order.class 的樣子
+                if(order!=null)
+                {
+                    orderList.add(order);
+                }
+            }
+            catch(JsonSyntaxException e)
+            {
+                e.printStackTrace();
+            }
+
+
+        }
     }
     private void setupListView()
     {
-//        String []data = new String[]{"1","2","3","4","5","6","7","8"};
-//        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,data);
+//        String []orderList = new String[]{"1","2","3","4","5","6","7","8"};
+//        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_expandable_list_item_1,orderList);
 //        List<Map<String,String>> mapList = new ArrayList<>();
-//        for(Order order: data)
+//        for(Order order: orderList)
 //        {
 //            Map<String,String> item = new HashMap<>();
 //
@@ -128,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
         int[] to = {R.id.noteTextView,R.id.storeInfoTextView,R.id.drinktextView};
 //        因為resourse裡面拿出的都是ID，所以用int
 //        SimpleAdapter adapter = new SimpleAdapter(this,mapList,R.layout.listview_order_item,from,to);
-        OrderAdapter adapter = new OrderAdapter(this,data);
+        OrderAdapter adapter = new OrderAdapter(this, orderList);
 
         listView.setAdapter(adapter);
     }
@@ -161,12 +215,18 @@ public class MainActivity extends AppCompatActivity {
         textView.setText(result);
         editText.setText("");
 
+
         Order order = new Order();//        new一個訂單
         order.note = text;
         order.drinkOrderList = drinkOrderList;
         order.storeInfo = (String)spinner.getSelectedItem();
 
-        data.add(order);
+        orderList.add(order);
+
+        Gson gson = new Gson();
+        String orderData = gson.toJson(order);//將物件轉字串
+        Utils.writeFile(this,"history",orderData + '\n');
+
 
         drinkOrderList = new ArrayList<>();//把飲料訂單清空
         setupListView();
