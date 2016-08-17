@@ -48,6 +48,7 @@ public class Drink extends ParseObject implements Parcelable {
     public Drink() {
     }
 
+
     protected Drink(Parcel in) {//Parcel in從記憶體拿回來的物件
         super();
         this.setName(in.readString());

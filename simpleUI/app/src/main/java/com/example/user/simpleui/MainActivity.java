@@ -99,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Order order = (Order) parent.getAdapter().getItem(position);
-                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();
+//                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();
                 //MainActivity.this 被包在listner裡面 this 代表的是 listener
             }
         });
@@ -143,26 +143,35 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupOrderHistory()
     {
-        String orderDatas = Utils.readFile(this,"history");
-        String[] orderDataArray = orderDatas.split("\n");//判斷換行來分割
-        //要用Gson換回去
-        Gson gson = new Gson();
-        for(String orderData : orderDataArray)
-        {
-            try{
-                Order order = gson.fromJson(orderData,Order.class);//要復原成Order.class 的樣子
-                if(order!=null)
-                {
-                    orderList.add(order);
-                }
+//        String orderDatas = Utils.readFile(this,"history");
+//        String[] orderDataArray = orderDatas.split("\n");//判斷換行來分割
+//        //要用Gson換回去
+//        Gson gson = new Gson();
+//        for(String orderData : orderDataArray)
+//        {
+//            try{
+//                Order order = gson.fromJson(orderData,Order.class);//要復原成Order.class 的樣子
+//                if(order!=null)
+//                {
+//                    orderList.add(order);
+//                }
+//            }
+//            catch(JsonSyntaxException e)
+//            {
+//                e.printStackTrace();
+//            }
+//        }
+        //接下來要從網路拿下資料
+        Order.getQuery().findInBackground(new FindCallback<Order>() {
+            @Override
+            public void done(List<Order> objects, ParseException e) {
+                  if(e==null)
+                  {
+                      orderList = objects;
+                      setupListView();
+                  }
             }
-            catch(JsonSyntaxException e)
-            {
-                e.printStackTrace();
-            }
-
-
-        }
+        });
     }
     private void setupListView()
     {
@@ -219,15 +228,27 @@ public class MainActivity extends AppCompatActivity {
 
 
         Order order = new Order();//        new一個訂單
-        order.note = text;
-        order.drinkOrderList = drinkOrderList;
-        order.storeInfo = (String)spinner.getSelectedItem();
+        order.setNote(text);
+        order.setDrinkOrderList(drinkOrderList);
+        order.setStoreInfo((String)spinner.getSelectedItem());
+
 
         orderList.add(order);
+        //上傳到網路上去
+        order.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e!=null)//沒有上傳成功
+                {
+                    Toast.makeText(MainActivity.this,"Order Failed",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
 
-        Gson gson = new Gson();
-        String orderData = gson.toJson(order);//將物件轉字串
-        Utils.writeFile(this,"history",orderData + '\n');
+
+//        Gson gson = new Gson();
+//        String orderData = gson.toJson(order);//將物件轉字串
+//        Utils.writeFile(this,"history",orderData + '\n');
 
 
         drinkOrderList = new ArrayList<>();//把飲料訂單清空
