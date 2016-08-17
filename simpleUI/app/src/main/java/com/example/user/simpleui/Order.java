@@ -60,6 +60,7 @@ public class Order extends ParseObject{
 
         return ParseQuery.getQuery(Order.class).include(DRINKORDERLIST_COL).include(DRINKORDERLIST_COL + '.' +DrinkOrder.DRINK_COL);
         //告訴他在載資料時要包含哪一些資料才可以
+        //DRINKORDERLIST_COL + '.' +DrinkOrder.DRINK_COL 要標名是從 DRINKORDERLIST_COL裡面的DrinkOrder.DRINK_COL拿資料
     }
 
 
