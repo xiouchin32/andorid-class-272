@@ -16,7 +16,7 @@ public class Order {
         //把DRINKORDER 飲料訂單拿出並且加總
         for(DrinkOrder drinkOrder: drinkOrderList)
         {
-            total += drinkOrder.lNumber*drinkOrder.drink.getlPrices() + drinkOrder.mNumber*drinkOrder.drink.getmPrices();
+            total += drinkOrder.getlNumber()*drinkOrder.getDrink().getlPrices() + drinkOrder.getmNumber()*drinkOrder.getDrink().getmPrices();
         }
        return total;
 

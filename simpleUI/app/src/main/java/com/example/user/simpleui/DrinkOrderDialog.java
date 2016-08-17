@@ -73,17 +73,18 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//依照他的架構創兆出POPUP的視窗
 
         builder.setView(contentView)
-                .setTitle(drinkOrder.drink.getName())
+                .setTitle(drinkOrder.getDrink().getName())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 //                        DrinkOrder drinkOrder = new DrinkOrder(drink); 在外面已經做過了
-                        drinkOrder.mNumber = mNumberPicker.getValue();
-                        drinkOrder.lNumber = lNumberPicker.getValue();
+                        drinkOrder.setmNumber(mNumberPicker.getValue());
+                        drinkOrder.setlNumber(lNumberPicker.getValue());
                         //寫一個小的function 回傳RADIOBUTTON 上面的字
-                        drinkOrder.ice = getSelectedTextFromRadioGroup(iceRadioGroup);
-                        drinkOrder.sugar = getSelectedTextFromRadioGroup(sugarRadioGroup);
-                        drinkOrder.note = noteEditText.getText().toString();
+                        drinkOrder.setIce(getSelectedTextFromRadioGroup(iceRadioGroup));
+                        drinkOrder.setSugar(getSelectedTextFromRadioGroup(sugarRadioGroup));
+                        drinkOrder.setNote(noteEditText.getText().toString());
+
 
                         if (mListener != null) {
                             mListener.onDrinkOrderResult(drinkOrder);//回傳
@@ -106,16 +107,16 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
 
         mNumberPicker.setMaxValue(100);
         mNumberPicker.setMinValue(0);//設定最大最小值
-        mNumberPicker.setValue(drinkOrder.mNumber);
+        mNumberPicker.setValue(drinkOrder.getmNumber());
 
         lNumberPicker.setMaxValue(100);
         lNumberPicker.setMinValue(0);
-        lNumberPicker.setValue(drinkOrder.lNumber);//一打開為之前的數量
+        lNumberPicker.setValue(drinkOrder.getlNumber());//一打開為之前的數量
 
-        noteEditText.setText(drinkOrder.note);
+        noteEditText.setText(drinkOrder.getNote());
 
-        setSelectedTextInRadioGroup(drinkOrder.ice,iceRadioGroup);//把資料做復原
-        setSelectedTextInRadioGroup(drinkOrder.sugar,sugarRadioGroup);
+        setSelectedTextInRadioGroup(drinkOrder.getIce(),iceRadioGroup);//把資料做復原
+        setSelectedTextInRadioGroup(drinkOrder.getSugar(),sugarRadioGroup);
 
 
         return builder.create();

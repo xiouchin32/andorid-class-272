@@ -117,7 +117,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         DrinkOrder order = null;
         for(DrinkOrder drinkOrder :drinkOrdersList)
         {
-            if(drinkOrder.drink.getObjectId().equals(drink.getObjectId()))
+            if(drinkOrder.getDrink().getObjectId().equals(drink.getObjectId()))
             {
                 order = drinkOrder;
                 break;
@@ -182,7 +182,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         for(int i=0;i<drinkOrdersList.size();i++)
         {
-            if(drinkOrdersList.get(i).drink.getObjectId().equals(drinkOrder.drink.getObjectId()))//判斷飲料ID是不是一樣
+            if(drinkOrdersList.get(i).getDrink().getObjectId().equals(drinkOrder.getDrink().getObjectId()))//判斷飲料ID是不是一樣
             {
 //                order = drinkOrder; 不能這樣打因為訂單會一一連結這樣會出問題\
                 drinkOrdersList.set(i,drinkOrder);
@@ -202,7 +202,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         //把DRINKORDER 飲料訂單拿出並且加總
         for(DrinkOrder drinkOrder: drinkOrdersList)
         {
-            total += drinkOrder.lNumber*drinkOrder.drink.getlPrices() + drinkOrder.mNumber*drinkOrder.drink.getmPrices();
+            total += drinkOrder.getlNumber()*drinkOrder.getDrink().getlPrices() + drinkOrder.getmNumber()*drinkOrder.getDrink().getmPrices();
 
         }
         totalTextView.setText(String.valueOf(total));
