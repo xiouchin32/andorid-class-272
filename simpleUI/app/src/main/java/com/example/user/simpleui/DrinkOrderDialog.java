@@ -73,7 +73,7 @@ public class DrinkOrderDialog extends DialogFragment//DialogFragment 會是POPUP
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());//依照他的架構創兆出POPUP的視窗
 
         builder.setView(contentView)
-                .setTitle(drinkOrder.drink.name)
+                .setTitle(drinkOrder.drink.getName())
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

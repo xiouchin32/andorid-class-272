@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**
@@ -66,10 +68,13 @@ public class DrinkAdapter extends BaseAdapter {
         }
 
         Drink drink = drinkList.get(position);
-        holder.drinknameTextView.setText(drink.name);
-        holder.lpriceTextView.setText(String.valueOf(drink.lPrices));
-        holder.mpriceTextView.setText(String.valueOf(drink.mPrices));//把數字轉呈字串
-        holder.imageView.setImageResource(drink.imageId);
+        holder.drinknameTextView.setText(drink.getName());
+        holder.lpriceTextView.setText(String.valueOf(drink.getlPrices()));
+        holder.mpriceTextView.setText(String.valueOf(drink.getmPrices()));//把數字轉呈字串
+//        holder.imageView.setImageResource(drink.imageId);
+        String imageURL = drink.getImage().getUrl();//接下來只要讓圖片載入URL就可以顯示圖片
+        //用picasso 載入圖片
+        Picasso.with(inflater.getContext()).load(imageURL).into(holder.imageView);
 
         return convertView;
     }

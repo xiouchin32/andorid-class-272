@@ -12,6 +12,9 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.parse.FindCallback;
+import com.parse.ParseException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,20 +60,30 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
             }
         });
 
-        setupDrinkMenu();
+       // setupDrinkMenu(); 因為還沒拿到background
 
         Log.d("DEBUG", "DrinkMenuActivity Oncreate");
     }
     private  void  setdata()
     {
-        for(int i = 0;i<names.length;i++) {
-            Drink drink = new Drink();
-            drink.name = names[i];
-            drink.lPrices = lprices[i];
-            drink.mPrices = mprices[i];
-            drink.imageId = imageIDs[i];
-            drinkList.add(drink);//把drink 丟到list裡面
-        }
+//        for(int i = 0;i<names.length;i++) {
+//            Drink drink = new Drink();
+//            drink.name = names[i];
+//            drink.lPrices = lprices[i];
+//            drink.mPrices = mprices[i];
+//            drink.imageId = imageIDs[i];
+//            drinkList.add(drink);//把drink 丟到list裡面
+//        }//我們會把資料放到網上 會從網上抓
+        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+            @Override
+            public void done(List<Drink> objects, ParseException e) {
+                if(e == null)
+                {
+                    drinkList = objects;
+                    setupDrinkMenu();
+                }
+            }
+        });
     }
 
     public  void done(View view)
@@ -104,7 +117,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         DrinkOrder order = null;
         for(DrinkOrder drinkOrder :drinkOrdersList)
         {
-            if(drinkOrder.drink.name.equals(drink.name))
+            if(drinkOrder.drink.getObjectId().equals(drink.getObjectId()))
             {
                 order = drinkOrder;
                 break;
@@ -169,7 +182,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 
         for(int i=0;i<drinkOrdersList.size();i++)
         {
-            if(drinkOrdersList.get(i).drink.name.equals(drinkOrder.drink.name))//判斷飲料ID是不是一樣
+            if(drinkOrdersList.get(i).drink.getObjectId().equals(drinkOrder.drink.getObjectId()))//判斷飲料ID是不是一樣
             {
 //                order = drinkOrder; 不能這樣打因為訂單會一一連結這樣會出問題\
                 drinkOrdersList.set(i,drinkOrder);
@@ -189,10 +202,9 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
         //把DRINKORDER 飲料訂單拿出並且加總
         for(DrinkOrder drinkOrder: drinkOrdersList)
         {
-            total += drinkOrder.lNumber*drinkOrder.drink.lPrices + drinkOrder.mNumber*drinkOrder.drink.mPrices;
+            total += drinkOrder.lNumber*drinkOrder.drink.getlPrices() + drinkOrder.mNumber*drinkOrder.drink.getmPrices();
 
         }
         totalTextView.setText(String.valueOf(total));
-
     }
 }
