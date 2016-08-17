@@ -49,7 +49,7 @@ public class Drink extends ParseObject implements Parcelable {
     }
 
     protected Drink(Parcel in) {//Parcel in從記憶體拿回來的物件
-
+        super();
         this.setName(in.readString());
         this.setlPrices(in.readInt());
         this.setmPrices(in.readInt());//全部都會從包果拿出來

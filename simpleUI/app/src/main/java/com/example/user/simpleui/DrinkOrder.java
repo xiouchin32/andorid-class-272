@@ -30,9 +30,12 @@ public class DrinkOrder extends ParseObject implements Parcelable {
 
     public DrinkOrder(Drink drink)
     {
+        super();
         this.setDrink(drink);
     }
 
+    public DrinkOrder()
+    {}
     @Override
     public int describeContents() {
         return 0;

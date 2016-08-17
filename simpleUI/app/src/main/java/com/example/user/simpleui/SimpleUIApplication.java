@@ -15,6 +15,7 @@ public class SimpleUIApplication extends Application {
 
         ParseObject.registerSubclass(Drink.class);//要先註冊一個客製化的PARSEOBJECT
         ParseObject.registerSubclass(DrinkOrder.class);//要先註冊一個客製化的PARSEOBJECT
+
         Parse.initialize(new Parse.Configuration.Builder(this)
                         .applicationId("oFQuZethAdtk8ncRGZvtqkLSu9YnNEIBJ0vLJ6Rt")
                         .server("https://parseapi.back4app.com/")
