@@ -265,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         order.pinInBackground("Order");//把資料並起來
-        
+
 //        Gson gson = new Gson();
 //        String orderData = gson.toJson(order);//將物件轉字串
 //        Utils.writeFile(this,"history",orderData + '\n');

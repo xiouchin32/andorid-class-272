@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.user.simpleui">
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!--會用到網路以及存取OS狀態-->
+
+    <!-- 會用到網路以及存取OS狀態 -->
     <application
         android:name=".SimpleUIApplication"
         android:allowBackup="true"
@@ -18,7 +20,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".DrinkMenuActivity"></activity>
+        <activity android:name=".DrinkMenuActivity" />
+        <activity android:name=".OrderDetailActivity"></activity>
     </application>
 
 </manifest>
