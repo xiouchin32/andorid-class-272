@@ -3,11 +3,15 @@ package com.example.user.simpleui;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.DeleteCallback;
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+
+import java.util.List;
 
 /**
  * Created by user on 2016/8/11.
@@ -109,12 +113,33 @@ public class Drink extends ParseObject implements Parcelable {
     public static Drink getDrinkFromCache(String ObjectId)
     {
         try {
-            Drink drink = getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(ObjectId);
+//            Drink drink = getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(ObjectId); ////開啟LOCAL CACHE被關掉了
+            Drink drink = getQuery().fromLocalDatastore().get(ObjectId);
             return drink;
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return Drink.createWithoutData(Drink.class,ObjectId);
+        return Drink.createWithoutData(Drink.class, ObjectId);
         //設定他的QUERY是先從CACHE去拿   把ObjectID 改成DRINK
     }
+    public static void getDrinksFromLocalThenRemote(final FindCallback<Drink> callback){//FindCallback 是一個INTERFACE 就是要會時做哪些FUNCTION的
+        //callback 會一個叫DONE的功能
+        getQuery().fromLocalDatastore().findInBackground(callback);//從LOCALDATABASE拿到資料後他會呼叫CALLBACK.DONE
+        getQuery().findInBackground(new FindCallback<Drink>() {//new FindCallback<Drink>() 這個跟上面的CALLBACK是不一樣的事
+            @Override
+            public void done(final List<Drink> list, ParseException e) {
+                if(e==null){
+                    //代表有載到資料 要把LOCAL的東西刪掉
+                    unpinAllInBackground("Drink", new DeleteCallback() {
+                        @Override
+                        public void done(ParseException e) {
+                           pinAllInBackground("Drink",list);
+                        }
+                    });
+                }
+                callback.done(list,e);//呼叫外面的DONE去更新資料　在ＤＲＩＮＫＭＥＮＵＡＣＴＩＶＩＴＹ的ＤＯＮＥ
+            }
+        });
+    }
+    //第一次先從LOCAL端拿 再拿REMOTE端  如果斷網的話就可以還有LOCAL的DATA 當有網路時就會更新
 }

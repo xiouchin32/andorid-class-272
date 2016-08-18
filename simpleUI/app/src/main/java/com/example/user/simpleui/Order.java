@@ -1,6 +1,8 @@
 package com.example.user.simpleui;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
@@ -58,10 +60,23 @@ public class Order extends ParseObject{
 
     public static ParseQuery<Order> getQuery(){
 
-        return ParseQuery.getQuery(Order.class).include(DRINKORDERLIST_COL).include(DRINKORDERLIST_COL + '.' +DrinkOrder.DRINK_COL);
+        return ParseQuery.getQuery(Order.class)
+                .include(DRINKORDERLIST_COL)
+                .include(DRINKORDERLIST_COL + '.' + DrinkOrder.DRINK_COL);
         //告訴他在載資料時要包含哪一些資料才可以
         //DRINKORDERLIST_COL + '.' +DrinkOrder.DRINK_COL 要標名是從 DRINKORDERLIST_COL裡面的DrinkOrder.DRINK_COL拿資料
     }
-
-
+    public static void getOrdersFromLocalThenRemote(final FindCallback<Order> callback)
+    {
+        getQuery().fromLocalDatastore().findInBackground(callback);
+        getQuery().findInBackground(new FindCallback<Order>() {
+            @Override
+            public void done(List<Order> list, ParseException e) {
+                if (e == null) {
+                    pinAllInBackground("Order", list);
+                }
+                callback.done(list, e);
+            }
+        });
+    }
 }

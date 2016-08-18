@@ -74,7 +74,7 @@ public class DrinkMenuActivity extends AppCompatActivity implements DrinkOrderDi
 //            drink.imageId = imageIDs[i];
 //            drinkList.add(drink);//把drink 丟到list裡面
 //        }//我們會把資料放到網上 會從網上抓
-        Drink.getQuery().findInBackground(new FindCallback<Drink>() {
+        Drink.getDrinksFromLocalThenRemote(new FindCallback<Drink>() {
             @Override
             public void done(List<Drink> objects, ParseException e) {
                 if(e == null)

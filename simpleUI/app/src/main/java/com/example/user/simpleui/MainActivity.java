@@ -162,14 +162,24 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        }
         //接下來要從網路拿下資料
-        Order.getQuery().findInBackground(new FindCallback<Order>() {
+//        Order.getQuery().findInBackground(new FindCallback<Order>() {
+//            @Override
+//            public void done(List<Order> objects, ParseException e) {
+//                  if(e==null)
+//                  {
+//                      orderList = objects;
+//                      setupListView();
+//                  }
+//            }
+//        });
+        //取資料要改成用自己寫的FUNCTION 並非用GETQUERY
+        Order.getOrdersFromLocalThenRemote(new FindCallback<Order>() {
             @Override
             public void done(List<Order> objects, ParseException e) {
-                  if(e==null)
-                  {
-                      orderList = objects;
-                      setupListView();
-                  }
+                if (e == null) {
+                    orderList = objects;
+                    setupListView();
+                }
             }
         });
     }
@@ -230,22 +240,32 @@ public class MainActivity extends AppCompatActivity {
         Order order = new Order();//        new一個訂單
         order.setNote(text);
         order.setDrinkOrderList(drinkOrderList);
-        order.setStoreInfo((String)spinner.getSelectedItem());
+        order.setStoreInfo((String) spinner.getSelectedItem());
 
 
         orderList.add(order);
         //上傳到網路上去
-        order.saveInBackground(new SaveCallback() {
+//        order.saveInBackground(new SaveCallback() {
+//            @Override
+//            public void done(ParseException e) {
+//                if(e!=null)//沒有上傳成功
+//                {
+//                    Toast.makeText(MainActivity.this,"Order Failed",Toast.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+
+        order.saveEventually(new SaveCallback() {//saveEventually沒網路時會先處存起來 當有網路時就會上傳上去
             @Override
             public void done(ParseException e) {
-                if(e!=null)//沒有上傳成功
+                if (e != null)//沒有上傳成功
                 {
-                    Toast.makeText(MainActivity.this,"Order Failed",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Order Failed", Toast.LENGTH_LONG).show();
                 }
             }
         });
-
-
+        order.pinInBackground("Order");//把資料並起來
+        
 //        Gson gson = new Gson();
 //        String orderData = gson.toJson(order);//將物件轉字串
 //        Utils.writeFile(this,"history",orderData + '\n');

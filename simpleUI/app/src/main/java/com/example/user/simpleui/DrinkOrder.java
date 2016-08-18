@@ -146,7 +146,7 @@ public class DrinkOrder extends ParseObject implements Parcelable {
     public static DrinkOrder getDrinkOrderFromCache(String ObjectId)//從CACHE裡面拿DRINKORDER
     {
         try {
-           return getQuery().setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK).get(ObjectId);
+           return getQuery().fromLocalDatastore().get(ObjectId);
             //setCachePolicy(ParseQuery.CachePolicy.CACHE_ELSE_NETWORK) 先從CACHE 再從NETWORK
         } catch (ParseException e) {
             e.printStackTrace();
