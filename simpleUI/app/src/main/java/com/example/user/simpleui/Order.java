@@ -26,6 +26,10 @@ public class Order extends ParseObject implements Parcelable{
     static final String STOREINFO_COL = "storeInfo";
     static final String DRINKORDERLIST_COL = "drinkOrderList";
 
+    public Order()
+    {
+        super();
+    }
     public int getTotal()
     {
         int total = 0;

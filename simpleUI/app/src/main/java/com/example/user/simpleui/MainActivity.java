@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 Order order = (Order) parent.getAdapter().getItem(position);
 //                Toast.makeText(MainActivity.this, order.note, Toast.LENGTH_LONG).show();
                 //MainActivity.this 被包在listner裡面 this 代表的是 listener
+                goToDetail(order);
             }
         });
 
@@ -281,6 +282,13 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("result",drinkOrderList);//讓drinkmenuactivity 可以拿到資料
         intent.setClass(this,DrinkMenuActivity.class);//呼叫DrinkMenuActivity.class 到this
         startActivityForResult(intent, REQUEST_CODE_DRINK_MENU_ACTIVITY);
+    }
+    public void goToDetail(Order order)
+    {
+        Intent intent = new Intent();
+        intent.putExtra("order",order);
+        intent.setClass(this,OrderDetailActivity.class);
+        startActivity(intent);
     }
 
     @Override
