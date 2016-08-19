@@ -25,6 +25,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -208,14 +209,29 @@ public class MainActivity extends AppCompatActivity {
 
         listView.setAdapter(adapter);
     }
+
     private  void setupSpinner()
     {
 //        dase來自resourse
-        String []storeInfo = getResources().getStringArray(R.array.storeInfo);
-        ArrayAdapter<String> adapter= new ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item,storeInfo);
-        spinner.setAdapter(adapter);
+//        String []storeInfo = getResources().getStringArray(R.array.storeInfo);//自己從LOCAL地方抓
 
-        spinner.setSelection(sharedPreferences.getInt("spinner",0));
+        final List<String> storeInfo = new ArrayList<String>();//從網路上抓
+        ParseQuery<ParseObject> parseQuery = new ParseQuery<ParseObject>("StoreInfo");
+        parseQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
+
+                for (ParseObject object : objects) {
+                    storeInfo.add(object.getString("name") + "," + object.getString("address"));
+                }
+                ArrayAdapter<String> adapter = new ArrayAdapter<String>(MainActivity.this, android.R.layout.simple_spinner_dropdown_item, storeInfo);
+                spinner.setAdapter(adapter);
+                spinner.setSelection(sharedPreferences.getInt("spinner", 0));
+            }
+        });
+
+
+
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

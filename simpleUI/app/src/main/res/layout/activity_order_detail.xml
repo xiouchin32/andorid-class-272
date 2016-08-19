@@ -48,4 +48,13 @@
         android:layout_below="@+id/storeinfotextView"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
+
+    <fragment
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/mapFragment"
+        android:layout_below="@+id/latLngTextView"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

@@ -9,6 +9,7 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -100,7 +101,8 @@ public class Order extends ParseObject implements Parcelable{
             dest.writeInt(0);
             dest.writeString(getNote());
             dest.writeString(getStoreInfo());
-            dest.writeParcelableArray((Parcelable[])getDrinkOrderList().toArray(),flags);//LIST轉ARRAY 先 TOARRAY 再說是PARCEABLE的
+//            dest.writeParcelableArray((Parcelable[])getDrinkOrderList().toArray(),flags);//LIST轉ARRAY 先 TOARRAY 再說是PARCEABLE的
+            dest.writeTypedList(getDrinkOrderList());
         }
         else
         {
@@ -113,7 +115,10 @@ public class Order extends ParseObject implements Parcelable{
         super();
         this.setNote(in.readString());
         this.setStoreInfo(in.readString());
-        this.setDrinkOrderList(Arrays.asList(((DrinkOrder[])in.readArray(DrinkOrder.class.getClassLoader()))));//把array換成LIST
+        ArrayList<DrinkOrder> drinkOrders = new ArrayList<>();
+        in.readTypedList(drinkOrders,DrinkOrder.CREATOR);
+        this.setDrinkOrderList(drinkOrders);
+//        this.setDrinkOrderList(Arrays.asList(((DrinkOrder[])in.readArray(DrinkOrder.class.getClassLoader()))));//把array換成LIST
     }
 
     public static final Parcelable.Creator<Order> CREATOR = new Parcelable.Creator<Order>() {
